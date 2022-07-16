@@ -1,0 +1,71 @@
+/* stili principali /home */
+*{
+    box-sizing: border-box;
+}
+html{
+
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    height: 100%;
+    font-size: 75%;
+    width: 100%;
+}
+/* qui ho utilizzato display Flex */
+body{
+    
+    background-image: url('/img/sfondo_home.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1{
+    size: 24px;
+    text-align: center;
+    color: black;
+    text-shadow: -1px 0 1px white, 0 -1px 1px white, 0 1px 1px white, 1px 0 1px white, 0 0 8px white, 0 0 8px white,
+    0 0 8px white, 2px 2px 3px black;
+
+}
+
+/* Form nascosto(usato come utilità di passaggio dati) */
+
+#stanzaUtente{
+    visibility: hidden;
+}
+/* stili form non di utilità(in caso si volesse testare) */
+#form{
+    width: 100vw;
+    height: 50vh;
+    display: flex;
+    justify-content: space-around;
+    flex-direction:column ;
+    align-items: center;
+}
+
+/* QRcode */
+
+
+#qrcode{
+    background-color: rgba(17, 17, 17, 0.5);
+    border: 2px solid black;
+    padding: 10px;
+    align-self: center;  
+}
+
+#qrcode h3{
+    margin-top: 0;
+    margin-bottom: 10%;
+    color: white;
+}
+
+
+
+
+

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/styleHome.css" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+        integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Home</title>>
+</head>
+
+<body>
+    <h1>Empatic Writing</h1>
+    <div id="qrcode">
+        <h3>Associa Device</h3>
+    </div>
+    <script>
+
+        let socket = io();
+
+        /* creo il QrCode */
+        socket.on('IpAddress', (uri, id) => {
+
+            let urlqr = `${uri}/app/?stanza=${id}`;
+             /*   svuoto il div QECode per la riconnesione dei WebSocket*/
+            
+            var divQr=document.getElementById("qrcode");
+            divQr.innerHTML="";
+            /*  libreria javascript(si potrebbe utilizzare una libreria JQuery) */
+            /* l'if serve a non far acodare piu codici qr se si lascia la pagina apert per molto tempo  */
+            let code = true;
+            if (code) {
+                new QRCode(document.getElementById("qrcode"), {
+                    text: urlqr,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                });
+                code = false;
+
+            };
+        });
+
+        /* rendering su pc quando il mobile si connette */
+        socket.on('connessioneMobile', (messaggio, stanza) => {
+            if (messaggio === 'true') {
+                const url = `/app/?stanza=${stanza}`
+                window.location = url;
+            }
+        });
+    </script>
+</body>
+
+</html>

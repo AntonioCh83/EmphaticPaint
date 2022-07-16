@@ -1,0 +1,200 @@
+/* stili principali /App */
+*{
+    box-sizing: border-box;
+}
+html{
+
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    height: 100%;
+    font-size: 65%;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+
+}
+
+body{
+  background-image: url('/img/sfondo_home.jpg');
+  position: relative;
+}
+#areaPaint{
+  margin: 0 auto;
+  
+  
+
+}
+
+#palette{
+  margin-top: 108%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  /* visibility: none; */
+  /* position: absolute;
+  bottom: 5%;
+  left:0; */
+  margin-bottom: 2rem;
+
+}
+
+label{
+  font-size: 2.3rem;
+  color: white;
+  font-weight:700 ;
+  line-height: 3.5rem;
+  text-shadow: 2px 2px 5px black;
+  margin-right: 2%;
+  
+}
+#bottoni span{
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+.azioni{
+  outline:1px solid #00ff00;
+  outline-offset: 2px;
+  width: 150px;
+  height: 50px;
+}
+
+
+h2{
+  color: #00ff00;
+  text-shadow: 2px 2px 2px black;
+  font-size: 2.1rem;
+  
+}
+
+.sfondo1{
+    color:rgb(205, 204, 204);
+    /* background-image: url('/img/background.jpg'); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+   
+}
+
+/* immagine snake */
+#imgSnake{
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+/* controller (ho utilizzato il display Grid)*/
+
+
+#controller{
+    position: fixed;
+    display: none;
+    top: 20%;
+    left: 5%;
+    
+    width: 320px;
+    height: 350px;
+    border: 2px solid #00ff00 ;
+    background-color: rgba(0,0,0,.7);
+    box-shadow:inset 0 0 7px white;
+    
+}
+#areaPaint{
+  background-color: rgba(143, 235, 137, 0.7);
+  /* position: fixed;
+  display: block;
+  top: 30%;
+  left: 50%; */
+  margin-bottom: 1.5rem;
+  width: 500px;
+  height: 500px;
+  outline: 5px solid #00ff00 ;
+  border: 2px solid black;
+  outline-offset: 5px;
+  box-shadow:inset 0 0 7px white;
+  
+
+}
+
+#btnHome{
+  box-sizing:border-box;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  width:320px;
+  height:100px;
+  background: rgba(125,125,125,.5);
+  color: #e55743;
+  text-transform: uppercase;
+  outline: 2px solid #00ff00 ;
+  cursor: pointer;
+  font-weight: bold;
+  border:3px groove white;
+  padding:.30em .30em;
+  letter-spacing:.20em;
+  outline-offset:2px;
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,.0) 30%, rgba(255,255,255,.8), rgba(255,255,255,.0) 70%),
+    linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 90%, rgba(255,255,255,.3)),
+    linear-gradient(to right, rgba(125,125,125,1), rgba(255,255,255,.9) 45%, rgba(125,125,125,.5)),
+    linear-gradient(to right, rgba(125,125,125,1), rgba(255,255,255,.9) 45%, rgba(125,125,125,.5)),
+    linear-gradient(to right, rgba(223,190,170,1), rgba(255,255,255,.9) 45%, rgba(223,190,170,.5)),
+    linear-gradient(to right, rgba(223,190,170,1), rgba(255,255,255,.9) 45%, rgba(223,190,170,.5));
+  background-repeat: no-repeat;
+  background-size: 200% 100%, auto, 100% 2px, 100% 2px, 100% 1px, 100% 1px;
+  background-position: 200% 0, 0 0, 0 0, 0 100%, 0 4px, 0 calc(100% - 4px);
+  box-shadow: rgba(0,0,0,.5) 3px 10px 10px -10px;
+
+}
+
+#btnHome:hover{
+  transition: .5s linear;
+  background-position: -200% 0, 0 0, 0 0, 0 100%, 0 4px, 0 calc(100% - 4px);
+  border-color:#234c87 ;
+  outline-color:white;
+}
+#btnHome a{
+  text-decoration: none;
+  color: black;
+  text-shadow: 3px 3px 2px white;
+  font-size: 1.6rem;
+}
+
+
+/* Mobile */
+
+@media only screen and (max-width:768px){
+    #controller{
+        display: block;
+        
+    }
+    #areaPaint{
+      display: none;
+    }
+    .snake{
+      display: none;
+    }
+    #palette{
+      display: block;
+    }
+    #btnHome{
+      margin-top: 0;
+      margin-bottom: 20px;
+      width: 260px;
+      height:50px ;
+    }
+    #btnHome a{
+      font-size: 1.8rem;
+      color: black;
+
+    }
+    
+}
+ #bottoni{
+  display: flex;
+  flex-direction: row;
+  
+  justify-content: space-around;
+ }

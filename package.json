@@ -1,0 +1,23 @@
+{
+  "name": "empatia",
+  "version": "1.0.0",
+  "description": "app in realtime",
+  "main": "indexE.js",
+  "scripts": {
+    "start": "nodemon indexE.js -e js,ejs,html,css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "ip": "^1.1.5",
+    "is-mobile": "^3.0.0",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empatia</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="/css/styleApp.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/1.0.5/jquery.mobile-events.js"></script>
+    <link rel="stylesheet" href="https://cdn.plyr.io/2.0.12/plyr.css">
+    <script src="/socket.io/socket.io.js"></script>
+    
+</head>
+<body class="sfondo1">
+    <h2 id="gameSide"></h2>
+    <div id="button">
+      <button id="btnHome">
+          <a id="a" href="javascript:delay('https://snake.hictech.com/home/')"><nobr>Rigenera QRCode</nobr></a>
+      </button>
+    </div>
+    <!-- <div><img src="/img/artist.png" alt="snake" id="imgSnake"></div> -->
+    <div id="w-area">
+      <div id="controller">
+        <canvas id="myCanvas" height="350" width="320"></canvas>
+      </div>
+      <div id="areaPaint">
+        <canvas id="myCanvas2" height="500" width="500"></canvas>
+      </div>
+      <div id="palette">
+        <div id="divColore">
+          <label for="colore">colore</label>
+          <input type="color" id="colore" name="colore" value="#0a0a0a"  onchange="aggiornaTools()">
+        </div>
+        <div id="divSpessore">
+          <label for="spessore">Spessore</label>
+          <input id="spessore" type="range" min="1" max="10" value="1" onchange="aggiornaTools()">
+        </div>
+      </div>
+    </div>
+    <div id="bottoni">
+      <div >
+        <button class="azioni" name="cancella" onclick="cancellaCanvas()"><span>Cancella</span></button>
+      </div>
+      <div >
+        <button class="azioni" name="resetta" onclick="resettaPennello()"><span>Resetta</span></button>
+      </div>
+    </div>
+
+    <!-- <video poster="poster.jpg" controls>
+      <source src="video.mp4" type="video/mp4">
+      <source src="video.webm" type="video/webm">
+  </video> -->
+    <!-- div snake -->
+    
+    <script>
+     
+
+      /* Socket.io */
+       let socket = io();
+        socket.on('connessione',(data)=>{
+            $('#gameSide').text(data)
+        })
+        
+        /* ascolto l'evento emesso dal server per interagire con il click del
+           rispettivo bottone */
+            var cancellare=true;
+            let colorePennello;
+            let spessorePennello;
+            var myCanvas2 = document.getElementById("myCanvas2");
+            var context2 = myCanvas2.getContext("2d");
+            var myCanvas = document.getElementById("myCanvas");
+            var context = myCanvas.getContext("2d");
+
+            function aggiornaTools(){
+              colorePennello=document.getElementById("colore").value;
+              spessorePennello=document.getElementById("spessore").value;
+            }
+
+            function cancellaCanvas(){
+              context2.clearRect(0, 0, 500, 500);
+              context.clearRect(0,0,350,350);        
+              }
+            function resettaPennello(){
+               colorePennello=document.getElementById("colore").value="#0a0a0a";
+               spessorePennello=document.getElementById("spessore").value=1;
+              }
+
+              socket.on('premiResetta',(azione)=>{
+                console.log(azione);
+               
+
+                  cancellaCanvas();
+                  
+              
+
+              })
+
+              $("button[name='cancella']").click(function(e){
+                
+               
+
+                  socket.emit('resetta',cancellare);
+  
+                          
+               
+                });
+              
+
+            window.addEventListener('load', ()=>{
+                resettaPennello();
+                aggiornaTools();})
+                
+                
+
+           function disegna(funzione,colore,spessore){
+                  context2.strokeStyle = colore;
+                  context2.fillStyle=colore;
+                  context2.beginPath();
+                  context2.arc(funzione.offset.x, funzione.offset.y, spessore, 0, 2*Math.PI, true);
+                  context2.fill();
+                  context2.stroke();
+                  
+                      // context.beginPath();
+                      // context.lineWidth = 10;
+                      // context.moveTo(funzione.offset.x, funzione.offset.y);
+                      // // Posizione(funzione,context);
+                      // context.lineTo(funzione.offset.x, funzione.offset.y);
+                      // context.closePath();
+                      // context.stroke();
+              }
+              
+
+              
+
+              
+
+
+       
+          socket.on('azione',(messaggio,funzione,spessorePennello,colorePennello)=>{
+                if(messaggio=='destra'){  
+                  disegna(funzione,spessorePennello,colorePennello);   
+                }
+                if(messaggio=='sinistra'){
+                  
+                  disegna(funzione,spessorePennello,colorePennello);
+            
+            console.log(funzione);
+            
+                }
+                if(messaggio=='giu'){             
+                  disegna(funzione,spessorePennello,colorePennello);              
+                    };          
+                if(messaggio=='su'){            
+                  disegna(funzione,spessorePennello,colorePennello);
+                }
+                
+            });
+          
+            /* emetto l'evento swipe sul controller(è presente un codice per evidenziare il movimento) */ 
+
+            function evidenziaMovimento(){
+                    var myCanvas = document.getElementById("myCanvas");
+                    var context = myCanvas.getContext("2d");
+              
+              $('#controller').tapmove(function(e, touch) { 
+                context.strokeStyle = "rgba(0, 255, 0,0.6)";
+                context.beginPath();
+                context.arc(touch.offset.x, touch.offset.y, 5, 0, 2*Math.PI, true);
+                context.fill();
+                context.stroke();
+              
+              });
+          
+              // $('#controller').tapend(function(e){context.clearRect(0, 0, 300, 300);})
+
+            };
+
+          $('#controller').on('tapmove',function(e,touch){
+      
+            socket.emit('tasto','sinistra',touch,colorePennello,spessorePennello);
+            evidenziaMovimento();
+          })
+          $('#controller').on('swiperight',function(e,touch){
+            socket.emit('tasto','destra',touch);
+            evidenziaMovimento();
+          })
+          $('#controller').on('swipeup',function(e,touch){
+            socket.emit('tasto','su',touch);
+            evidenziaMovimento();
+          })
+          $('#controller').on('swipedown',function(e,touch){
+            socket.emit('tasto','giu',touch);
+            evidenziaMovimento();
+          })
+          //  ----------------------------------------------------
+          /*ascolto l'evento home associato al click del bottone rigeneraQrcode*/
+          
+          socket.on('home',(azione)=>{
+              
+              // alert('ciao');
+                  const home='https://snake.hictech.com/home/'
+              window.location.href=home;
+       
+   });
+    
+   /*emetto l'evento rigeneraQrc*/
+   
+   $('#btnHome').click(function(e){
+       socket.emit('rigeneraQrc','true');
+       
+//         if (screen.width <= 768) {
+//   document.location = "https://snake.hictech.com/home/";
+// }
+   })
+     /*funzione di ritaedo apertura link*/
+   function delay (URL) { setTimeout( function() { window.location = URL }, 5000 ); }
+  </script>
+  <script src="https://cdn.plyr.io/2.0.12/plyr.js"></script>
+  <script>plyr.setup();</script>
+</body>
+</html>
