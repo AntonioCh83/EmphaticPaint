@@ -33,8 +33,7 @@
             divQr.innerHTML="";
             /*  libreria javascript(si potrebbe utilizzare una libreria JQuery) */
             /* l'if serve a non far acodare piu codici qr se si lascia la pagina apert per molto tempo  */
-            let code = true;
-            if (code) {
+           
                 new QRCode(document.getElementById("qrcode"), {
                     text: urlqr,
                     width: 200,
@@ -42,9 +41,7 @@
                     colorDark: "#000000",
                     colorLight: "#ffffff",
                 });
-                code = false;
-
-            };
+            
         });
 
         /* rendering su pc quando il mobile si connette */
