@@ -51,8 +51,17 @@ roomEmitter.on('getRoom',(room)=>{
 
  /* controllo la connessione da mobile */
  connectionEmitter.on('getconn',(data)=>{
+    try {
+        // Validate data
+        if (!data) {
+            throw new Error('Invalid data');
+        }
     connessione=data;
     sideGame='mobile';
+} catch (error) {
+    // Handle errors
+    console.error('Error processing data:', error);
+}
 })
  
 /* istanzio le variabili globali "Map" per salvare la lista utenti collegati */
@@ -77,6 +86,7 @@ io.on('connection',function(socket){
     //questa funzione è da chiamare in caso volessimo usare l'app da locale
     const ipA=getIp();
     // const url='https://snake.hictech.com'
+    //const url2='192.168.1.163'
     /* e lo passo al Client che lo userà per creare il QrCode */
     socket.emit('IpAddress',ipA,idT);
     
@@ -131,7 +141,7 @@ io.on('connection',function(socket){
      });
 })
 
-server.listen(3001,()=>console.log('server in ascolto sulla port 3000...'));
+server.listen(3001,()=>console.log('server in ascolto sulla port 3001...'));
  
 
 
