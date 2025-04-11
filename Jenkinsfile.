@@ -1,0 +1,82 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'NodeJS_18'  // Definito in Jenkins > Global Tool Configuration
+    }
+
+    environment {
+        SONARQUBE_SCANNER = 'SonarQubeScanner'  // Nome che hai dato alla config SonarQube
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/tuo-utente/tuo-repo-node.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('SAST - ESLint') {
+            steps {
+                sh 'npx eslint . --format junit -o eslint-results.xml || true'
+                junit 'eslint-results.xml'
+            }
+        }
+
+        stage('SAST - SonarQube') {
+            steps {
+                withSonarQubeEnv('SonarQubeScanner') {
+                    sh 'sonar-scanner'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage('Start App with Docker Compose') {
+            steps {
+                sh 'docker-compose up -d'
+                sleep time: 10, unit: 'SECONDS'
+            }
+        }
+
+        stage('DAST - OWASP ZAP') {
+            steps {
+                sh '''
+                docker run -t owasp/zap2docker-stable zap-baseline.py \
+                    -t http://localhost:3000 \
+                    -r zap-report.html || true
+                '''
+                archiveArtifacts artifacts: 'zap-report.html', fingerprint: true
+            }
+        }
+
+        stage('Shutdown Docker') {
+            steps {
+                sh 'docker-compose down'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completa.'
+        }
+        success {
+            echo 'Build and security scans OK!'
+        }
+        failure {
+            echo 'Qualcosa è andato storto 😬'
+        }
+    }
+}
